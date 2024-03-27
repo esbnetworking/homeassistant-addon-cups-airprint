@@ -7,12 +7,13 @@ until [ -e /var/run/avahi-daemon/socket ]; do
 done
 
 bashio::log.info "Preparing directories"
-cp -v -R /etc/cups /data
+# Create if not exists
+if [ ! -d "/data/cups" ]; then
+  cp -v -R /etc/cups /data
+fi
+# Link config files
 rm -v -fR /etc/cups
-
-#ln -v -s /data/cups /etc/cups
-ln -v -s /data/cups /config/addons_config/cups
-
+ln -v -s /data/cups /etc/cups
 bashio::log.info "Starting CUPS server as CMD from S6"
 
 cupsd -f
